@@ -1,0 +1,151 @@
+<robot name="car" xmlns:xacro="http://www.ros.org/wiki/xacro">
+    <xacro:property name="PI" value="3.141"/>
+    <material name="black">
+        <color rgba="0.0 0.0 0.0 1.0" />
+    </material>
+
+    <xacro:property name="base_footprint_radius" value="0.001" />
+    <!-- 设置 base_footprint  -->
+    <link name="base_footprint">
+        <visual>
+            <geometry>
+                <sphere radius="${base_footprint_radius}" />
+            </geometry>
+        </visual>
+    </link>
+
+    <xacro:property name="base_link_radius" value="0.17" /> <!-- base_link 半径 -->
+    <xacro:property name="base_link_length" value="0.08" /> <!-- base_link 长 -->
+    <xacro:property name="base_link_mass" value="0.2" /> <!-- base_link 质量 -->
+    <xacro:property name="earth_space" value="0.01" /> <!-- 离地间距/万向轮半径 -->
+    <xacro:property name="caster_link_mass" value="0.05" /><!-- caster_link 质量 -->
+    <!-- 添加底盘 -->
+    <link name="base_link">
+        <visual>
+            <geometry>
+                <cylinder radius="${base_link_radius}" length="${base_link_length}" />
+            </geometry>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <material name="yellow">
+                <color rgba="0.9 0.9 0.1 0.5" />
+            </material>
+        </visual>
+        <collision>
+            <geometry>
+                <cylinder radius="${base_link_radius}" length="${base_link_length}" />
+            </geometry>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+        </collision>
+        <xacro:cylinder_inertial_matrix m="${base_link_mass}" r="${base_link_radius}" h="${base_link_length}" />
+    </link>
+    <gazebo reference="base_link">
+        <material>Gazebo/Yellow</material>
+    </gazebo>
+
+     <!-- 添加关节 脚点-底盘 -->
+    <joint name="base2footprint" type="fixed">
+        <parent link="base_footprint" />
+        <child link="base_link"/>
+        <origin xyz="0 0 ${earth_space + base_link_length / 2 }" />
+    </joint>
+
+    <!-- 添加万向轮 -->
+    <link name="caster_link">
+        <visual>
+            <geometry>
+                <sphere radius="${earth_space}" />
+            </geometry>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <material name="black"/>
+        </visual>
+        <collision>
+            <geometry>
+                <sphere radius="${earth_space}" />
+            </geometry>
+            <origin xyz="0 0 0" rpy="0 0 0" />        
+        </collision>
+        <xacro:sphere_inertial_matrix m="${caster_link_mass}" r="${earth_space}" />
+    </link>
+    <gazebo reference="caster_link">
+        <material>Gazebo/Black</material>
+    </gazebo>
+
+    <!-- 添加关节 万向轮-底盘 -->
+    <joint name="caster2base" type="continuous">
+        <parent link="base_link" />
+        <child link="caster_link"/>
+        <origin xyz="0.1 0 ${base_link_length / -2}" />
+        <axis xyz="1 1 1" />
+    </joint>
+
+    <!-- 添加驱动电机、驱动轮及其关节 -->
+    <!-- 驱动电机、驱动轮属性 -->
+    <xacro:property name="motor_radius" value="0.01" /><!-- 半径 -->
+    <xacro:property name="motor_length" value="0.05" /><!-- 宽度 -->
+    <xacro:property name="motor_mass" value="0.1" /><!-- wheel 质量 -->
+    <xacro:property name="wheel_radius" value="0.03" /><!-- 半径 -->
+    <xacro:property name="wheel_length" value="0.02" /><!-- 宽度 -->
+    <xacro:property name="wheel_mass" value="0.05" /><!-- wheel 质量 -->
+    <!-- 驱动电机、驱动轮宏实现 -->
+    <xacro:macro name="add_wheels" params="name flag">
+        <!-- 添加驱动电机 -->
+        <link name="${name}_motor">
+            <visual>
+                <geometry>
+                    <cylinder radius="${motor_radius}" length="${motor_length}" />
+                </geometry>
+                <origin xyz="0 0 0" rpy="${PI / 2} 0 0" />
+                <material name="black"/>
+            </visual>
+            <collision>
+                <geometry>
+                    <cylinder radius="${motor_radius}" length="${motor_length}" />
+                </geometry>
+                <origin xyz="0 0 0" rpy="${PI / 2} 0 0" />       
+            </collision>
+            <xacro:cylinder_inertial_matrix m="${motor_mass}" r="${motor_radius}" h="${motor_length}" />
+        </link>
+        <gazebo reference="${name}_motor">
+            <material>Gazebo/Black</material>
+        </gazebo>
+
+        <!-- 添加关节 驱动电机-底盘 -->
+        <joint name="${name}_motor2base" type="fixed">
+            <parent link="base_link" />
+            <child link="${name}_motor" />
+            <origin xyz="-0.03 ${0.1*flag} -0.02" />
+        </joint>
+
+        <!-- 添加驱动轮 -->
+        <link name="${name}_wheel">
+            <visual>
+                <geometry>
+                    <cylinder radius="${wheel_radius}" length="${wheel_length}" />
+                </geometry>
+                <origin xyz="0 0 0" rpy="${PI / 2} 0 0" />
+                <material name="black"/>
+            </visual>
+            <collision>
+                <geometry>
+                    <cylinder radius="${wheel_radius}" length="${wheel_length}" />
+                </geometry>
+                <origin xyz="0 0 0" rpy="${PI / 2} 0 0" />
+            </collision>
+            <xacro:cylinder_inertial_matrix m="${wheel_mass}" r="${wheel_radius}" h="${wheel_length}" />
+        </link>
+        <gazebo reference="${name}_wheel">
+            <material>Gazebo/Orange</material>
+        </gazebo>
+
+        <!-- 添加关节 驱动轮-驱动电机 -->
+        <joint name="${name}_wheel2motor" type="continuous">
+            <parent link="${name}_motor" />
+            <child link="${name}_wheel" />
+            <origin xyz="0 ${0.025*flag} 0" />
+            <axis xyz="0 1 0" />
+        </joint>
+    </xacro:macro>
+
+    <xacro:add_wheels name="lf" flag="1" />
+    <xacro:add_wheels name="rt" flag="-1" />
+</robot>

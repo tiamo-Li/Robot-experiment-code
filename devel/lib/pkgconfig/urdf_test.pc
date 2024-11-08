@@ -1,0 +1,8 @@
+prefix=/home/tiamo/first_ws/devel
+
+Name: urdf_test
+Description: Description of urdf_test
+Version: 0.0.0
+Cflags: 
+Libs: -L${prefix}/lib 
+Requires: 

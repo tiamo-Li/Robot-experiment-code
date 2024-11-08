@@ -1,0 +1,8 @@
+prefix=/home/tiamo/first_ws/devel
+
+Name: converter
+Description: Description of converter
+Version: 0.0.0
+Cflags: 
+Libs: -L${prefix}/lib 
+Requires: 
