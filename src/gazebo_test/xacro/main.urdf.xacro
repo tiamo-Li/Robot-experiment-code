@@ -1,8 +1,0 @@
-<robot name="main" xmlns:xacro="http://wiki.ros.org/xacro">
-    <xacro:include filename="inertial.xacro" />
-    <xacro:include filename="car.urdf.xacro" />
-    <xacro:include filename="laser.urdf.xacro" />
-    <!-- 里程计与雷达配置 -->
-    <xacro:include filename="move.xacro" />
-    <xacro:include filename="laser_config.xacro" />
-</robot>

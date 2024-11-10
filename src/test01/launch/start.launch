@@ -1,9 +1,0 @@
-<!-- 文件名：start.launch -->
-<launch>
-    <!-- node pkg="包名" type="节点名" name="自命名"-->
-    <!-- 启动 talker 节点 -->
-    <node pkg="test01" type="talker" name="talker" output="screen"/>
-
-    <!-- 启动 listener 节点 -->
-    <node pkg="test01" type="listener" name="listener" output="screen"/>
-</launch>

@@ -1,6 +1,0 @@
-<launch>
-    <!-- 启动slam节点 -->
-    <include file="$(find slam)/launch/gmapping.launch" />
-    <!-- 运行move_base节点 -->
-    <include file="$(find slam)/launch/move_base_config.launch" />
-</launch>

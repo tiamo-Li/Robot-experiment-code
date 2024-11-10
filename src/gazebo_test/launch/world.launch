@@ -1,6 +1,0 @@
-<launch>
-    <!-- 启动 gazebo -->
-    <include file="$(find gazebo_ros)/launch/empty_world.launch" >
-        <arg name="world_name" value="$(find gazebo_test)/world/demo.world" />
-    </include>
-</launch>

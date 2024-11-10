@@ -1,2 +1,0 @@
-converter:test01:urdf_test
--DCATKIN_DEVEL_PREFIX=/home/tiamo/first_ws/devel -DCMAKE_INSTALL_PREFIX=/home/tiamo/first_ws/install -G Unix Makefiles
