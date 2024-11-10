@@ -1,0 +1,23 @@
+digraph G {
+node [shape=box];
+"base_footprint" [label="base_footprint"];
+"base_link" [label="base_link"];
+"caster_link" [label="caster_link"];
+"lf_motor" [label="lf_motor"];
+"lf_wheel" [label="lf_wheel"];
+"rt_motor" [label="rt_motor"];
+"rt_wheel" [label="rt_wheel"];
+node [shape=ellipse, color=blue, fontcolor=blue];
+"base_footprint" -> "base2footprint" [label="xyz: 0 0 0.05 \nrpy: 0 -0 0"]
+"base2footprint" -> "base_link"
+"base_link" -> "caster2base" [label="xyz: 0.1 0 -0.04 \nrpy: 0 -0 0"]
+"caster2base" -> "caster_link"
+"base_link" -> "lf_motor2base" [label="xyz: -0.03 0.1 -0.02 \nrpy: 0 -0 0"]
+"lf_motor2base" -> "lf_motor"
+"lf_motor" -> "lf_wheel2motor" [label="xyz: 0 0.025 0 \nrpy: 0 -0 0"]
+"lf_wheel2motor" -> "lf_wheel"
+"base_link" -> "rt_motor2base" [label="xyz: -0.03 -0.1 -0.02 \nrpy: 0 -0 0"]
+"rt_motor2base" -> "rt_motor"
+"rt_motor" -> "rt_wheel2motor" [label="xyz: 0 -0.025 0 \nrpy: 0 -0 0"]
+"rt_wheel2motor" -> "rt_wheel"
+}

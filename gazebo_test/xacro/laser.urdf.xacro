@@ -1,0 +1,32 @@
+<robot name="my_laser" xmlns:xacro="http://wiki.ros.org/xacro">
+    <!-- 雷达属性 -->
+    <xacro:property name="laser_length" value="0.08" /> <!-- 雷达长度 -->
+    <xacro:property name="laser_z" value="${base_link_length / 2 + laser_length / 2}" /> <!-- 雷达安装的z坐标  -->
+    <xacro:property name="laser_mass" value="0.2" /> <!-- 雷达质量 -->
+
+    <!-- 雷达关节以及link -->
+    <link name="laser">
+        <visual>
+            <geometry>
+                <mesh filename="package://gazebo_test/mesh/rplidar.dae" />
+            </geometry>
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
+        </visual>
+        <collision>
+            <geometry>
+                <box size="${laser_length} ${laser_length} ${laser_length}" />
+            </geometry>
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
+        </collision>
+        <xacro:Box_inertial_matrix m="${laser_mass}" l="${laser_length}" w="${laser_length}" h="${laser_length}" />
+    </link>
+
+    <joint name="laser2base" type="fixed">
+        <parent link="base_link" />
+        <child link="laser" />
+        <origin xyz="0 0 ${laser_z}" />
+    </joint>
+    <gazebo reference="laser">
+        <material>Gazebo/Black</material>
+    </gazebo>
+</robot>
