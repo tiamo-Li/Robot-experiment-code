@@ -8,14 +8,6 @@
 
 可以参考官方文档：[适用于 Linux 的 Windows 子系统文档 | Microsoft Learn](https://learn.microsoft.com/zh-cn/windows/wsl/)
 
-注意，在安装Linux发行版前，最好关闭可能修改hosts文件的软件，比如Watt Toolkit的Hosts加速
-
-因为这可能会让你的新系统的hosts文件变成一坨，如果这已经发生了，那么修改hosts文件就好
-
-```bash
-sudo nano /etc/hosts
-```
-
 如果是第一次安装WSL，我们可以直接在在Powershell中执行命令来完成安装
 
 系统中自带的Powershell是旧版，可以参考[PowerShell 文档 - PowerShell | Microsoft Learn](https://learn.microsoft.com/zh-cn/powershell/?view=powershell-7.4)来安装新版Powershell~~（装不装都行，只是提一嘴）~~
@@ -31,31 +23,17 @@ sudo nano /etc/hosts
 
 # 2. 安装Ubuntu-18.04
 
+注意，在安装Linux发行版前，最好关闭可能修改hosts文件的软件，比如Watt Toolkit的Hosts加速
+
+因为这可能会让你的新系统的hosts文件变成一坨，如果这已经发生了，那么修改hosts文件就好
+
+```bash
+sudo nano /etc/hosts
+```
+
 1. 重启电脑，再次使用管理员身份运行Powershell
 
 2. 执行命令
-
-   ```bash
-   # 查看可用发行版列表
-   wsl --list --online
-   
-   # 返回结果
-   NAME                            FRIENDLY NAME
-   Ubuntu                          Ubuntu
-   Debian                          Debian GNU/Linux
-   kali-linux                      Kali Linux Rolling
-   Ubuntu-18.04                    Ubuntu 18.04 LTS
-   Ubuntu-20.04                    Ubuntu 20.04 LTS
-   Ubuntu-22.04                    Ubuntu 22.04 LTS
-   Ubuntu-24.04                    Ubuntu 24.04 LTS
-   OracleLinux_7_9                 Oracle Linux 7.9
-   OracleLinux_8_7                 Oracle Linux 8.7
-   OracleLinux_9_1                 Oracle Linux 9.1
-   openSUSE-Leap-15.6              openSUSE Leap 15.6
-   SUSE-Linux-Enterprise-15-SP5    SUSE Linux Enterprise 15 SP5
-   SUSE-Linux-Enterprise-15-SP6    SUSE Linux Enterprise 15 SP6
-   openSUSE-Tumbleweed             openSUSE Tumbleweed
-   ```
 
    ```bash
    # 安装Ubuntu-18.04
@@ -66,7 +44,7 @@ sudo nano /etc/hosts
 
    注意：输入密码时为盲人键入，光标会保持在原处，正常键入密码即可
 
-卸载Linux发行版：
+如果想要卸载Linux发行版，命令如下：
 
 ```bash
 # 还是以Ubuntu-18.04为例
@@ -74,6 +52,32 @@ wsl --unregister Ubuntu-18.04
 ```
 
 如果忘记了用户密码可以参照：[技术|在 WSL 上忘记了 Linux 密码？下面是如何轻松重设的方法](https://linux.cn/article-13545-1.html)
+
+如果想要安装其他Linux发行版系统，可以查看可下载的系统
+
+```bash
+# 查看可用发行版列表
+wsl --list --online
+
+# 返回结果
+NAME                            FRIENDLY NAME
+Ubuntu                          Ubuntu
+Debian                          Debian GNU/Linux
+kali-linux                      Kali Linux Rolling
+Ubuntu-18.04                    Ubuntu 18.04 LTS
+Ubuntu-20.04                    Ubuntu 20.04 LTS
+Ubuntu-22.04                    Ubuntu 22.04 LTS
+Ubuntu-24.04                    Ubuntu 24.04 LTS
+OracleLinux_7_9                 Oracle Linux 7.9
+OracleLinux_8_7                 Oracle Linux 8.7
+OracleLinux_9_1                 Oracle Linux 9.1
+openSUSE-Leap-15.6              openSUSE Leap 15.6
+SUSE-Linux-Enterprise-15-SP5    SUSE Linux Enterprise 15 SP5
+SUSE-Linux-Enterprise-15-SP6    SUSE Linux Enterprise 15 SP6
+openSUSE-Tumbleweed             openSUSE Tumbleweed
+```
+
+
 
 # 3. 修改软件包源
 
@@ -85,7 +89,7 @@ wsl --unregister Ubuntu-18.04
 
 2. 使用以下内容替换原内容，注意，以下内容仅适用于Ubuntu-18.04
 
-   具体可查看[ubuntu | 镜像站使用帮助 | 清华大学开源软件镜像站 | Tsinghua Open Source Mirror](https://mirrors.tuna.tsinghua.edu.cn/help/ubuntu/)
+   如果需要其他版本系统的软件包镜像源，具体可查看[ubuntu | 镜像站使用帮助 | 清华大学开源软件镜像站 | Tsinghua Open Source Mirror](https://mirrors.tuna.tsinghua.edu.cn/help/ubuntu/)
 
    ```bash
    # 默认注释了源码镜像以提高 apt update 速度，如有需要可自行取消注释
@@ -116,6 +120,8 @@ wsl --unregister Ubuntu-18.04
    ```
 
 4. 更新软件包时会提示订阅Ubuntu Pro，推荐注册一个Ununtu One账号，个人密钥可以免费订阅5台设备
+
+   注册并获取到个人Token后，在终端输入以下命令：
 
    ```
    sudo pro attach <你的订阅Token>
@@ -211,6 +217,8 @@ wsl --unregister Ubuntu-18.04
 
 2. 克隆并编译包
 
+   注意：此时工作目录是在 `~/ros_ws/src` 下
+
    ```bash
    git clone https://github.com/Zyhlibrary/FAEP.git
    cd ..
@@ -227,4 +235,4 @@ wsl --unregister Ubuntu-18.04
    source devel/setup.bash && roslaunch exploration_manager exploration.launch
    ```
 
-   使用 `2D Nav Goal` 触发
+   使用 `2D Nav Goal` 触发仿真
