@@ -225,14 +225,21 @@ openSUSE-Tumbleweed             openSUSE Tumbleweed
    catkin_make
    ```
 
-3. 启动两个新的WSL终端，分别执行以下的命令
+3. 配置环境变量
 
    ```bash
-   source devel/setup.bash && roslaunch exploration_manager rviz.launch
+   echo "source ~/ros_ws/devel/setup.bash" >> ~/.bashrc
+   source ~/.bashrc
+   ```
+
+4. 启动两个新的WSL终端，分别执行以下的命令
+
+   ```bash
+   roslaunch exploration_manager rviz.launch
    ```
 
    ```bash
-   source devel/setup.bash && roslaunch exploration_manager exploration.launch
+   roslaunch exploration_manager exploration.launch
    ```
 
    使用 `2D Nav Goal` 触发仿真
