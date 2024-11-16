@@ -217,7 +217,7 @@ openSUSE-Tumbleweed             openSUSE Tumbleweed
 
 2. 克隆并编译包
 
-   注意：此时工作目录是在 `~/ros_ws/src` 下
+   注意：此时工作路径是在 `~/ros_ws/src` 下
 
    ```bash
    git clone https://github.com/Zyhlibrary/FAEP.git
