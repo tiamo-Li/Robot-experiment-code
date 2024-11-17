@@ -44,6 +44,10 @@ sudo nano /etc/hosts
 
    注意：输入密码时为盲人键入，光标会保持在原处，正常键入密码即可
 
+4. 关闭Power shell，可以直接搜索Ubuntu来打开其终端，使用Powershell可能会出现一些问题
+
+   微软官方推荐使用Windows Terminal，Terminal的安装参见：[Windows 终端概述 | Microsoft Learn](https://learn.microsoft.com/zh-cn/windows/terminal/)
+
 如果想要卸载Linux发行版，命令如下：
 
 ```bash
