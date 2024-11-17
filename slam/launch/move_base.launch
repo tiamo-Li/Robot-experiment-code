@@ -1,4 +1,6 @@
 <launch>
+    <!-- 启动gazebo -->
+    <include file="$(find gazebo_test)/launch/gazebo.launch" />
     <!-- 运行地图服务器，并且加载设置的地图-->
     <node name="map_server" pkg="map_server" type="map_server" args="$(find slam)/map/gmapping.yaml" />
     <!-- 启动AMCL节点 -->

@@ -1,4 +1,6 @@
 <launch>
+    <!-- 启动gazebo -->
+    <include file="$(find gazebo_test)/launch/gazebo.launch" />
     <!-- 启动slam节点 -->
     <include file="$(find slam)/launch/gmapping.launch" />
     <!-- 运行move_base节点 -->
