@@ -81,13 +81,13 @@ openSUSE-Tumbleweed             openSUSE Tumbleweed
 
 # 3. 修改软件包源
 
-1. 使用nano打开软件源文件
+1. 使用nano打开软件源文件，删除所有原有官方源
 
    ```bash
    sudo nano /etc/apt/sources.list
    ```
 
-2. 使用以下内容替换原内容，注意，以下内容仅适用于Ubuntu-18.04
+2. 粘贴以下内容，注意，以下内容仅适用于Ubuntu-18.04
 
    如果需要其他版本系统的软件包镜像源，具体可查看[ubuntu | 镜像站使用帮助 | 清华大学开源软件镜像站 | Tsinghua Open Source Mirror](https://mirrors.tuna.tsinghua.edu.cn/help/ubuntu/)
 
@@ -121,6 +121,8 @@ openSUSE-Tumbleweed             openSUSE Tumbleweed
 
 4. 更新软件包时会提示订阅Ubuntu Pro，推荐注册一个Ununtu One账号，个人密钥可以免费订阅5台设备
 
+   如果没有订阅Ubuntu Pro，可能得不到部分软件包的更新支持
+
    注册并获取到个人Token后，在终端输入以下命令：
 
    ```
@@ -136,6 +138,8 @@ openSUSE-Tumbleweed             openSUSE Tumbleweed
    sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-key 421C365BD9FF1F717815A3895523BAEEB01FA116
    sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys F42ED6FBAB17C654
    ```
+
+   ROS源的添加也可以参考：[ros | 镜像站使用帮助 | 清华大学开源软件镜像站 | Tsinghua Open Source Mirror](https://mirrors.tuna.tsinghua.edu.cn/help/ros/)
 
 2. 更新软件源并安装ROS
 
@@ -232,14 +236,18 @@ openSUSE-Tumbleweed             openSUSE Tumbleweed
    source ~/.bashrc
    ```
 
-4. 启动两个新的WSL终端，分别执行以下的命令
+4. 执行以下的命令
 
    ```bash
    roslaunch exploration_manager rviz.launch
    ```
 
+   再启动一个新的WSL终端，执行以下命令
+   
    ```bash
    roslaunch exploration_manager exploration.launch
    ```
-
-   使用 `2D Nav Goal` 触发仿真
+   
+   使用 `2D Nav Goal` 触发仿真，结果如图
+   
+   <img src="images/result.png" style="zoom:50%;" />
