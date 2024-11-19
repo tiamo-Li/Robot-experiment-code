@@ -228,7 +228,7 @@ openSUSE-Tumbleweed             openSUSE Tumbleweed
    注意：此时工作路径是在 `~/ros_ws/src` 下
 
    ```bash
-   其算力值为sm_git clone https://github.com/Zyhlibrary/FAEP.git
+   git clone https://github.com/Zyhlibrary/FAEP.git
    ```
 
    部分可能会出现Anaconda的环境变量导致编译失败的，可以删除Win中的Anaconda环境变量
