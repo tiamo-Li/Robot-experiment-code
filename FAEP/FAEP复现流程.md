@@ -228,8 +228,39 @@ openSUSE-Tumbleweed             openSUSE Tumbleweed
    注意：此时工作路径是在 `~/ros_ws/src` 下
 
    ```bash
-   git clone https://github.com/Zyhlibrary/FAEP.git
-   cd ..
+   其算力值为sm_git clone https://github.com/Zyhlibrary/FAEP.git
+   ```
+
+   部分可能会出现Anaconda的环境变量导致编译失败的，可以删除Win中的Anaconda环境变量
+
+   修改文件，在 uav_simulator 的 local_sensing 包下的CMakelist.txt中
+
+   如果你的显卡是20系，那么架构是Pascal，其算力值为sm_61
+
+   如果你的显卡是20系，那么架构是Turing，其算力值为sm_75
+
+   如果你的显卡是30系，那么架构是Ampere，其算力值为sm_86
+
+   如果你的显卡是40系，那么架构是Ada，其算力值为sm_89
+
+   ```cmake
+     set(CUDA_NVCC_FLAGS 
+   #       -gencode arch=compute_20,code=sm_20;
+   #       -gencode arch=compute_20,code=sm_21;
+   #       -gencode arch=compute_30,code=sm_30;
+   #       -gencode arch=compute_35,code=sm_35;
+   #       -gencode arch=compute_50,code=sm_50;
+   #       -gencode arch=compute_52,code=sm_52; 
+   #       -gencode arch=compute_60,code=sm_60;
+   #       -gencode arch=compute_75,code=sm_75;
+         -gencode arch=compute_86,code=sm_86;
+   #       -gencode arch=compute_89,code=sm_89;
+     )
+   ```
+
+   回到工作空间 `~/ros_ws` 下，编译包
+
+   ```bash
    catkin_make
    ```
 
