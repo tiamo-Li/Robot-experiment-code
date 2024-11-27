@@ -1,0 +1,14 @@
+<launch>
+    <!--启动gmapping建图-->
+    <include file="$(find nav_practice)/launch/gmapping.launch" />
+
+    <!--启动move_base-->
+    <include file="$(find nav_practice)/launch/move_base_config.launch" />
+
+    <!--启动explore_costmap-->
+    <include file="$(find explore_lite)/launch/explore.launch" />
+
+    <!-- 启动主控制脚本 -->
+    <node pkg="nav_practice" type="main_controller.py" name="main_controller" output="screen" />
+
+</launch>
