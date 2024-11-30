@@ -3,6 +3,5 @@
         args="0.0 0.0 0.1 1.5707963267949 0.0 0.0 base_link rplidar_link" />
 
     <node pkg="rviz" type="rviz" name="rviz" args="-d (find ros_test)/config/turtle_test.rviz"/>
-    <!-- <node pkg="rviz" type="rviz" name="rviz" /> -->
     <node name="teleop_twist_keyboard" pkg="teleop_twist_keyboard" type="teleop_twist_keyboard.py" output="screen"/>
 </launch>

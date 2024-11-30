@@ -1,16 +1,24 @@
-使用WSL2安装Ubuntu-18.04，环境配置，并复现项目
+使用WSL2安装Ubuntu-20.04，环境配置，并复现项目[Zyhlibrary/FAEP](https://github.com/Zyhlibrary/FAEP)
 
 ----
 
 [TOC]
 
-# 1. 安装WSL
+# 1. 安装WSL与Ubuntu-20.04
 
 可以参考官方文档：[适用于 Linux 的 Windows 子系统文档 | Microsoft Learn](https://learn.microsoft.com/zh-cn/windows/wsl/)
 
 如果是第一次安装WSL，我们可以直接在在Powershell中执行命令来完成安装
 
 系统中自带的Powershell是旧版，可以参考[PowerShell 文档 - PowerShell | Microsoft Learn](https://learn.microsoft.com/zh-cn/powershell/?view=powershell-7.4)来安装新版Powershell~~（装不装都行，只是提一嘴）~~
+
+注意，在安装Linux发行版前，最好关闭可能修改hosts文件的软件，比如Watt Toolkit的Hosts加速
+
+因为这可能会让你的新系统的hosts文件变成一坨，如果这已经发生了，那么修改hosts文件就好
+
+```bash
+sudo nano /etc/hosts
+```
 
 1. 使用管理员身份运行Powershell
 
@@ -21,69 +29,44 @@
    wsl --install --no-distribution
    ```
 
-# 2. 安装Ubuntu-18.04
+3. 重启电脑，再次使用管理员身份运行Powershell
 
-注意，在安装Linux发行版前，最好关闭可能修改hosts文件的软件，比如Watt Toolkit的Hosts加速
-
-因为这可能会让你的新系统的hosts文件变成一坨，如果这已经发生了，那么修改hosts文件就好
-
-```bash
-sudo nano /etc/hosts
-```
-
-1. 重启电脑，再次使用管理员身份运行Powershell
-
-2. 执行命令
+4. 执行命令
 
    ```bash
-   # 安装Ubuntu-18.04
-   wsl --install Ubuntu-18.04
+   # 安装Ubuntu-20.04
+   wsl --install Ubuntu-20.04
    ```
 
-3. 等待一段时间，安装完成后会自己启动WSL，需要新建用户名和密码
+5. 等待一段时间，安装完成后会自己启动WSL，需要新建用户名和密码
 
    注意：输入密码时为盲人键入，光标会保持在原处，正常键入密码即可
 
-4. 关闭Power shell，可以直接搜索Ubuntu来打开其终端，使用Powershell可能会出现一些问题
+6. 关闭Power shell，可以直接搜索Ubuntu来打开其终端，使用Powershell可能会出现一些问题
 
    微软官方推荐使用Windows Terminal，Terminal的安装参见：[Windows 终端概述 | Microsoft Learn](https://learn.microsoft.com/zh-cn/windows/terminal/)
 
 如果想要卸载Linux发行版，命令如下：
 
 ```bash
-# 还是以Ubuntu-18.04为例
-wsl --unregister Ubuntu-18.04
+# 查看已安装的发行版信息
+wsl --list --verbose
+# 以Ubuntu-20.04为例
+wsl --unregister Ubuntu-20.04
 ```
 
 如果忘记了用户密码可以参照：[技术|在 WSL 上忘记了 Linux 密码？下面是如何轻松重设的方法](https://linux.cn/article-13545-1.html)
+
+解决：[“wsl: 检测到 localhost 代理配置，但未镜像到 WSL。NAT 模式下的 WSL 不支持 localhost 代理”](https://blog.csdn.net/m0_62815143/article/details/141285660)
 
 如果想要安装其他Linux发行版系统，可以查看可下载的系统
 
 ```bash
 # 查看可用发行版列表
 wsl --list --online
-
-# 返回结果
-NAME                            FRIENDLY NAME
-Ubuntu                          Ubuntu
-Debian                          Debian GNU/Linux
-kali-linux                      Kali Linux Rolling
-Ubuntu-18.04                    Ubuntu 18.04 LTS
-Ubuntu-20.04                    Ubuntu 20.04 LTS
-Ubuntu-22.04                    Ubuntu 22.04 LTS
-Ubuntu-24.04                    Ubuntu 24.04 LTS
-OracleLinux_7_9                 Oracle Linux 7.9
-OracleLinux_8_7                 Oracle Linux 8.7
-OracleLinux_9_1                 Oracle Linux 9.1
-openSUSE-Leap-15.6              openSUSE Leap 15.6
-SUSE-Linux-Enterprise-15-SP5    SUSE Linux Enterprise 15 SP5
-SUSE-Linux-Enterprise-15-SP6    SUSE Linux Enterprise 15 SP6
-openSUSE-Tumbleweed             openSUSE Tumbleweed
 ```
 
-
-
-# 3. 修改软件包源
+# 2. 修改软件包源并安装ROS
 
 1. 使用nano打开软件源文件，删除所有原有官方源
 
@@ -91,97 +74,61 @@ openSUSE-Tumbleweed             openSUSE Tumbleweed
    sudo nano /etc/apt/sources.list
    ```
 
-2. 粘贴以下内容，注意，以下内容仅适用于Ubuntu-18.04
+2. 粘贴以下内容，注意，以下内容仅适用于Ubuntu-20.04
 
    如果需要其他版本系统的软件包镜像源，具体可查看[ubuntu | 镜像站使用帮助 | 清华大学开源软件镜像站 | Tsinghua Open Source Mirror](https://mirrors.tuna.tsinghua.edu.cn/help/ubuntu/)
 
    ```bash
    # 默认注释了源码镜像以提高 apt update 速度，如有需要可自行取消注释
-   deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ bionic main restricted universe multiverse
-   # deb-src https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ bionic main restricted universe multiverse
-   deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ bionic-updates main restricted universe multiverse
-   # deb-src https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ bionic-updates main restricted universe multiverse
-   deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ bionic-backports main restricted universe multiverse
-   # deb-src https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ bionic-backports main restricted universe multiverse
+   deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ focal main restricted universe multiverse
+   # deb-src https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ focal main restricted universe multiverse
+   deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ focal-updates main restricted universe multiverse
+   # deb-src https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ focal-updates main restricted universe multiverse
+   deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ focal-backports main restricted universe multiverse
+   # deb-src https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ focal-backports main restricted universe multiverse
    
    # 以下安全更新软件源包含了官方源与镜像站配置，如有需要可自行修改注释切换
-   deb http://security.ubuntu.com/ubuntu/ bionic-security main restricted universe multiverse
-   # deb-src http://security.ubuntu.com/ubuntu/ bionic-security main restricted universe multiverse
+   deb http://security.ubuntu.com/ubuntu/ focal-security main restricted universe multiverse
+   # deb-src http://security.ubuntu.com/ubuntu/ focal-security main restricted universe multiverse
    
    # 预发布软件源，不建议启用
-   # deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ bionic-proposed main restricted universe multiverse
-   # # deb-src https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ bionic-proposed main restricted universe multiverse
+   # deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ focal-proposed main restricted universe multiverse
+   # # deb-src https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ focal-proposed main restricted universe multiverse
    ```
 
    Ctrl+O并回车保存，Ctrl+X退出编辑器
 
-3. 更新软件包目录及软件包，并删除不再需要的依赖
+3. 更新软件包目录及软件包
 
    ```bash
    sudo apt update
    sudo apt upgrade -y
-   sudo apt autoremove -y
    ```
 
-4. 更新软件包时会提示订阅Ubuntu Pro，推荐注册一个Ununtu One账号，个人密钥可以免费订阅5台设备
-
-   如果没有订阅Ubuntu Pro，可能得不到部分软件包的更新支持
-
-   注册并获取到个人Token后，在终端输入以下命令：
-
-   ```
-   sudo pro attach <你的订阅Token>
-   ```
-
-# 4. 安装ROS Melodic
-
-1. 添加安装源及配置密钥
+4. 添加ROS安装源及配置密钥
 
    ```bash
-   sudo sh -c '. /etc/lsb-release && echo "deb http://mirrors.ustc.edu.cn/ros/ubuntu/ $DISTRIB_CODENAME main" > /etc/apt/sources.list.d/ros-latest.list'
-   sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-key 421C365BD9FF1F717815A3895523BAEEB01FA116
-   sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys F42ED6FBAB17C654
-   ```
-
-   ROS源的添加也可以参考：[ros | 镜像站使用帮助 | 清华大学开源软件镜像站 | Tsinghua Open Source Mirror](https://mirrors.tuna.tsinghua.edu.cn/help/ros/)
-
-2. 更新软件源并安装ROS
-
-   ```bash
+   sudo sh -c '. /etc/lsb-release && echo "deb http://mirrors.tuna.tsinghua.edu.cn/ros/ubuntu/ `lsb_release -cs` main" > /etc/apt/sources.list.d/ros-latest.list'
+   sudo apt-key adv --keyserver 'hkp://keyserver.ubuntu.com:80' --recv-key C1CF6E31E6BADE8868B172B4F42ED6FBAB17C654
    sudo apt update
-   sudo apt-get install ros-melodic-desktop-full
-   sudo apt install python-rosdep
    ```
 
-3. 初始化rosdep
-
    ```bash
-   sudo rosdep init
-   rosdep update
+   # 如果装不上密钥，可以尝试
+   wget http://packages.ros.org/ros.key -O - | sudo apt-key add -
    ```
 
-4. 配置环境变量
+   ROS源的添加参考了：[ros | 镜像站使用帮助 | 清华大学开源软件镜像站 | Tsinghua Open Source Mirror](https://mirrors.tuna.tsinghua.edu.cn/help/ros/)
+
+5. 安装ROS并配置环境变量
 
    ```bash
-   echo "source /opt/ros/melodic/setup.bash" >> ~/.bashrc
+   sudo apt install ros-noetic-desktop-full
+   echo "source /opt/ros/noetic/setup.bash" >> ~/.bashrc
    source ~/.bashrc
    ```
 
-5. 添加工作空间构建所需的依赖
-
-   ```bash
-   sudo apt install python-rosinstall python-rosinstall-generator python-wstool build-essential
-   ```
-
-6. 创建工作空间
-
-   ````bash
-   mkdir -p ros_ws/src
-   cd ros_ws
-   catkin_make
-   ````
-
-# 5. 安装CUDA Toolkit
+# 3. 安装CUDA Toolkit
 
 1. 安装Toolkit
 
@@ -209,39 +156,65 @@ openSUSE-Tumbleweed             openSUSE Tumbleweed
    source ~/.bashrc
    ```
 
-3. 安装依赖
+3. 启用OpenGL硬件渲染
+
+   更换为Ubuntu20.04的原因之一就在于此，Ubuntu18.04的Mesa版本为20.x，这不支持OpenGL硬件渲染，而使用llvm渲染会使得仿真过程很卡顿。
+
+   当然，你可以选择继续使用Ubuntu18.04，并且如果想要更新Mesa，可以参照：[如何在 Ubuntu 上安装 Mesa 驱动程序](https://itsfoss.com/install-mesa-ubuntu/)
 
    ```bash
-   sudo apt-get install freeglut3-dev build-essential libx11-dev libxmu-dev libxi-dev libgl1-mesa-glx libglu1-mesa libglu1-mesa-dev
+   sudo apt install mesa-utils
+   glxinfo | grep OpenGL
    ```
 
-# 6. 复现项目
+   从返回的信息我们可以看到OpenGL 渲染器使用了显卡
+
+   如果你有多张显卡或者被核显困扰，想要更改使用的显卡，可以参照：[WSLg 中的 GPU 选择 · 微软/wslg Wiki](https://github.com/microsoft/wslg/wiki/GPU-selection-in-WSLg)
+
+# 4. 复现FUEL
+
+[HKUST-Aerial-Robotics/FUEL: An Efficient Framework for Fast UAV Exploration](https://github.com/HKUST-Aerial-Robotics/FUEL)
 
 1. 安装依赖
 
    ```bash
-   sudo apt-get install libarmadillo-dev ros-melodic-nlopt libdw-dev
+   git clone -b v2.7.1 https://github.com/stevengj/nlopt.git
+   cd nlopt
+   mkdir build
+   cd build
+   cmake ..
+   make
+   sudo make install
+   sudo apt-get install libarmadillo-dev
    ```
 
-2. 克隆并编译包
+2. 编译FUEL包
 
-   注意：此时工作路径是在 `~/ros_ws/src` 下
+   回到用户目录下，新建工作空间
 
    ```bash
-   git clone https://github.com/Zyhlibrary/FAEP.git
+   cd ~
+   mkdir -p fuel_ws/src
+   cd fuel_ws/src
    ```
 
-   部分可能会出现Anaconda的环境变量导致编译失败的，可以删除Win中的Anaconda环境变量
+   克隆并修改包
 
-   修改文件，在 uav_simulator 的 local_sensing 包下的CMakelist.txt中
+   ```bash
+   git clone https://github.com/HKUST-Aerial-Robotics/FUEL.git
+   ```
 
-   如果你的显卡是20系，那么架构是Pascal，其算力值为sm_61
+   修改文件，在 `uav_simulator/local_sensing/CMakelist.txt` 中
 
-   如果你的显卡是20系，那么架构是Turing，其算力值为sm_75
+   如果你的显卡是10系，其架构是Pascal，其算力值为sm_61
 
-   如果你的显卡是30系，那么架构是Ampere，其算力值为sm_86
+   如果你的显卡是20系，其架构是Turing，其算力值为sm_75
 
-   如果你的显卡是40系，那么架构是Ada，其算力值为sm_89
+   如果你的显卡是30系，其架构是Ampere，其算力值为sm_86
+
+   如果你的显卡是40系，其架构是Ada，其算力值为sm_89
+
+   详见：[CUDA GPUs - Compute Capability | NVIDIA Developer](https://developer.nvidia.com/cuda-gpus)
 
    ```cmake
      set(CUDA_NVCC_FLAGS 
@@ -258,31 +231,102 @@ openSUSE-Tumbleweed             openSUSE Tumbleweed
      )
    ```
 
-   回到工作空间 `~/ros_ws` 下，编译包
+   回到工作空间下，编译包
+
+   部分可能会出现Anaconda的环境变量导致编译失败的，可以删除Win中的Anaconda环境变量
 
    ```bash
+   cd ..
    catkin_make
    ```
 
-3. 配置环境变量
+3. 运行仿真示例
+
+   在工作空间下执行命令
 
    ```bash
-   echo "source ~/ros_ws/devel/setup.bash" >> ~/.bashrc
-   source ~/.bashrc
+   source devel/setup.bash && roslaunch exploration_manager rviz.launch
    ```
 
-4. 执行以下的命令
+   新终端，同样在工作空间下执行
 
    ```bash
-   roslaunch exploration_manager rviz.launch
+   source devel/setup.bash && roslaunch exploration_manager exploration.launch
    ```
 
-   再启动一个新的WSL终端，执行以下命令
-   
-   ```bash
-   roslaunch exploration_manager exploration.launch
+   使用 `2D Nav Goal` 触发仿真，在使用硬件加速后明显没有那么卡顿了
+
+4. 选择不同的探索环境
+
+   在`FUEL/fuel_planner/exploration_manager/launch/simulator.xml`中第22行
+
+   ```xml
+     <node pkg ="map_generator" name ="map_pub" type ="map_pub" output = "screen" args="$(find map_generator)/resource/office.pcd"/>
    ```
-   
-   使用 `2D Nav Goal` 触发仿真，结果如图
-   
-   <img src="images/result.png" style="zoom:50%;" />
+
+   可用的环境在`FUEL/uav_simulator/map_generator/resource/`下
+
+# 5. 复现FAEP
+
+1. 安装依赖
+
+   ```bash
+   sudo apt-get install libdw-dev
+   ```
+
+2. 创建工作空间
+
+   ```bash
+   mkdir -p faep_ws/src
+   cd faep_ws/src
+   ```
+
+3. 克隆并修改包
+
+   ```bash
+   git clone https://github.com/Zyhlibrary/FAEP.git
+   ```
+   同样修改 `uav_simulator/local_sensing/CMakelist.txt` 文件
+
+   然后，步骤变多了，不知道为什么这个傻鸟作者好好的把FUEL中的配置给删了
+
+   使用FUEL对应位置的文件内容来替换 ` "FAEP/faep_planner/bspline_opt/CMakeLists.txt"` 中的内容
+
+   在 `faep_ws/src/` 下，修改 `CMakelist.txt` 文件
+
+   这个是为了改起来方便，因为这个傻鸟把所有 `CMakelist.txt` 文件里的C++14都删了，懒得一个一个改
+
+   ```bash
+   sudo nano CMakeLists.txt
+   ```
+
+   在其中添加使用C++14
+
+   ```cmake
+   set(CMAKE_CXX_STANDARD 14)
+   ```
+
+4. 回到工作空间 `~/faep_ws` 下，编译包
+
+   部分可能会出现Anaconda的环境变量导致编译失败的，可以删除Win中的Anaconda环境变量
+
+   ```bash
+   cd ..
+   catkin_make
+   ```
+
+5. 运行仿真示例
+
+   在工作空间下执行命令
+
+   ```bash
+   source devel/setup.bash && roslaunch exploration_manager rviz.launch
+   ```
+
+   新终端，同样在工作空间下执行
+
+   ```bash
+   source devel/setup.bash && roslaunch exploration_manager exploration.launch
+   ```
+
+   使用 `2D Nav Goal` 触发仿真
